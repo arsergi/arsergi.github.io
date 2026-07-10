@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Intern projects by arsergi at Red Hat">
+  <meta name="theme-color" content="#0A0000">
+  <title>arsergi — Red Hat Intern Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --red: #EE0000;
+      --red-deep: #CC0000;
+      --red-dark: #990000;
+    }
+
+    body {
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      background: #0A0000;
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: rgba(238, 0, 0, 0.25); }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    /* ── Panels ── */
+
+    .panel {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .panel--hero  { background: #080000; }
+    .panel--p1    { background: #120404; }
+    .panel--p2    { background: #1A0808; }
+    .panel--p3    { background: #220C0C; }
+    .panel--outro { background: #FFFAFA; color: #1D1D1D; }
+
+    .panel-content {
+      position: relative;
+      z-index: 4;
+      max-width: 520px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ── Lights ── */
+
+    .lights {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.4s ease 0.2s;
+    }
+
+    .panel.in-view .lights { opacity: 1; }
+
+    .light {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--c);
+    }
+
+    .light--tw {
+      animation: twinkle infinite ease-in-out;
+      animation-delay: var(--td);
+      animation-duration: var(--tt);
+    }
+
+    @keyframes twinkle {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(0.25); opacity: 0.3; }
+    }
+
+    /* ── Hero ── */
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 4rem;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s ease-out 0.3s forwards;
+    }
+
+    .hero-tagline {
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: 0.75rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.55s forwards;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255, 255, 255, 0.25);
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 0.6875rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.8s ease-out 0.9s forwards;
+      transition: opacity 0.4s ease;
+    }
+
+    .scroll-cue svg { animation: bounce 2s ease-in-out infinite; }
+
+    /* ── Project content ── */
+
+    .project-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+    }
+
+    .project-desc {
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.55);
+      margin-top: 1rem;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease 0.45s, transform 0.6s ease 0.45s;
+    }
+
+    .panel.in-view .project-title,
+    .panel.in-view .project-desc,
+    .panel.in-view .project-meta {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .project-link {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1.0625rem;
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      transition: color 0.2s;
+    }
+
+    .project-link:hover { color: var(--red); }
+
+    .project-link:focus-visible,
+    .connect-link:focus-visible {
+      outline: 2px solid var(--red);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Outro ── */
+
+    .panel--outro .project-desc  { color: rgba(0, 0, 0, 0.45); }
+    .panel--outro .project-link  { color: #1D1D1D; }
+    .panel--outro .project-link:hover { color: var(--red-deep); }
+
+    .outro-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 2rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+    }
+
+    .panel.in-view .outro-heading { opacity: 1; transform: translateY(0); }
+
+    .connect-links {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease 0.35s, transform 0.6s ease 0.35s;
+    }
+
+    .panel.in-view .connect-links { opacity: 1; transform: translateY(0); }
+
+    .connect-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1.0625rem;
+      color: #1D1D1D;
+      text-decoration: none;
+      padding: 0.625rem 1.25rem;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 6px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .connect-link:hover { border-color: var(--red); color: var(--red-deep); }
+    .connect-link svg   { width: 16px; height: 16px; }
+
+    .footer-line {
+      font-size: 0.8125rem;
+      color: rgba(0, 0, 0, 0.3);
+      margin-top: 2rem;
+      opacity: 0;
+      transition: opacity 0.6s ease 0.5s;
+    }
+
+    .panel.in-view .footer-line { opacity: 1; }
+
+    /* ── Fedoras ── */
+
+    .fedora-wrap {
+      position: absolute;
+      top: 0;
+      left: var(--x);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateY(-120%);
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.5s ease;
+      transition-delay: var(--delay, 0s);
+    }
+
+    .panel.in-view .fedora-wrap {
+      transform: translateY(0);
+      opacity: var(--opacity, 1);
+    }
+
+    .fedora-string {
+      width: 2px;
+      height: var(--string);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .panel--outro .fedora-string { background: rgba(0, 0, 0, 0.15); }
+
+    .fedora-hat {
+      width: var(--size);
+      margin-top: -8px;
+      transform-origin: top center;
+      animation: swing var(--period, 4s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+
+    .fedora-hat svg,
+    .fedora-hat img { width: 100%; height: auto; display: block; }
+
+    /* ── Keyframes ── */
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+    @keyframes swing {
+      0%, 100% { transform: rotate(-2.5deg); }
+      50%      { transform: rotate(2.5deg); }
+    }
+
+    /* ── Responsive ── */
+
+    @media (max-width: 640px) {
+      .hero-name      { font-size: 2.75rem; }
+      .project-title  { font-size: 2rem; }
+      .panel-content  { padding: 1.5rem; }
+    }
+    @media (max-width: 380px) {
+      .hero-name     { font-size: 2.25rem; }
+      .project-title { font-size: 1.75rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <template id="fedora-tpl">
+    <img src="fedora.png" alt="" draggable="false">
+  </template>
+
+  <!-- ════════ HERO ════════ -->
+  <section class="panel panel--hero in-view">
+    <div class="lights"></div>
+    <div class="fedoras"></div>
+    <div class="panel-content">
+      <h1 class="hero-name">Andrew Sergison</h1>
+      <p class="hero-tagline">Ansible TMM Intern</p>
+    </div>
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 12L2 6h12L8 12z"/></svg>
+    </div>
+  </section>
+
+  <!-- ════════ PROJECT 1 ════════ -->
+  <section class="panel panel--p1">
+    <div class="lights"></div>
+    <div class="fedoras"></div>
+    <div class="panel-content">
+      <h2 class="project-title">Introduction to Automation Coding Assistant Lab</h2>
+      <p class="project-desc">Zero-touch interactive lab to demonstrate advanced AI playbook and role creation with the Ansible VS Code Extension.</p>
+      <div class="project-meta">
+        <a href="https://github.com/arsergi/zt-writing-your-first-playbook-lightspeed" class="project-link">View project →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PROJECT 2 ════════ -->
+  <section class="panel panel--p2">
+    <div class="lights"></div>
+    <div class="fedoras"></div>
+    <div class="panel-content">
+      <h2 class="project-title">AAP-Demo: Fleet Addon</h2>
+      <p class="project-desc">Addon for open-source Ansible Automation Platform local cluster infrastructure to provision an inventory of VMs, letting solutions architects run job templates against RHEL images, fully offline.</p>
+      <div class="project-meta">
+        <a href="https://github.com/arsergi/aap-demo" class="project-link">View project →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PROJECT 3 ════════ -->
+  <section class="panel panel--p3">
+    <div class="lights"></div>
+    <div class="fedoras"></div>
+    <div class="panel-content">
+      <h2 class="project-title">Private Automation Hub Lab</h2>
+      <p class="project-desc">Walks the student through Ansible playbook signing and collection uploading, demonstrating a full Private Automation Hub workflow.</p>
+      <div class="project-meta">
+        <a href="https://github.com/arsergi/zt-ans-bu-verify-sign" class="project-link">View project →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ OUTRO ════════ -->
+  <section class="panel panel--outro">
+    <div class="lights"></div>
+    <div class="fedoras"></div>
+    <div class="panel-content">
+      <h2 class="outro-heading">Connect</h2>
+      <div class="connect-links">
+        <a href="https://github.com/arsergi" target="_blank" rel="noopener" class="connect-link">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a href="linkedin.com/in/andrew-sergison" class="connect-link">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+      <p class="footer-line">Built with a little help from Claude, obviously.</p>
+    </div>
+  </section>
+
+  <script>
+    const MOBILE = window.matchMedia('(max-width: 640px)').matches;
+    const SCALE = MOBILE ? 0.45 : 1;
+
+    // ── Fedoras (escalating density) ──
+    const fedoraSvg = document.getElementById('fedora-tpl').content;
+    const HAT_COUNTS = [
+      { sel: '.panel--hero',  n: 0 },
+      { sel: '.panel--p1',    n: 3 },
+      { sel: '.panel--p2',    n: 8 },
+      { sel: '.panel--p3',    n: 16 },
+      { sel: '.panel--outro', n: 28 },
+    ];
+
+    const vw = window.innerWidth;
+
+    HAT_COUNTS.forEach(cfg => {
+      const container = document.querySelector(cfg.sel + ' .fedoras');
+      const count = Math.round(cfg.n * (MOBILE ? 0.5 : 1));
+      const frag = document.createDocumentFragment();
+      const placed = [];
+
+      function overlaps(cx, cy, r) {
+        for (const p of placed) {
+          const dx = cx - p.cx;
+          const dy = cy - p.cy;
+          if (dx * dx + dy * dy < (r + p.r) * (r + p.r)) return true;
+        }
+        return false;
+      }
+
+      let hatIndex = 0;
+      for (let i = 0; i < count; i++) {
+        const size = 62 + Math.random() * 175;
+        const stringLen = 20 + Math.random() * 180;
+        const r = size / 2;
+
+        let x, cx, cy, ok = false;
+        for (let attempt = 0; attempt < 40; attempt++) {
+          x = 3 + Math.random() * 94;
+          cx = x / 100 * vw;
+          cy = stringLen + r;
+          if (!overlaps(cx, cy, r)) { ok = true; break; }
+        }
+        if (!ok) continue;
+
+        placed.push({ cx, cy, r });
+        const opacity = 0.85 + Math.random() * 0.15;
+        const delay = 0.1 + (hatIndex / count) * 0.8 + Math.random() * 0.2;
+        const period = 3 + Math.random() * 3;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'fedora-wrap';
+        wrap.style.cssText =
+          `--x:${x}%;--string:${stringLen}px;--size:${size}px;` +
+          `--delay:${delay.toFixed(2)}s;--opacity:${opacity.toFixed(2)};--period:${period.toFixed(1)}s`;
+
+        const string = document.createElement('div');
+        string.className = 'fedora-string';
+
+        const hat = document.createElement('div');
+        hat.className = 'fedora-hat';
+        hat.appendChild(fedoraSvg.cloneNode(true));
+
+        wrap.appendChild(string);
+        wrap.appendChild(hat);
+        frag.appendChild(wrap);
+        hatIndex++;
+      }
+
+      container.appendChild(frag);
+    });
+
+    // ── Terrain curves (each returns y% for a given x 0-1) ──
+    const T = {
+      hero:  x => 64 + 6*Math.sin(x*Math.PI*2) + 3*Math.sin(x*Math.PI*4.5+0.8),
+      p1:    x => 60 + 9*Math.sin(x*Math.PI*3+0.5) + 4*Math.cos(x*Math.PI*5.5+1),
+      p2:    x => 63 - 7*Math.cos(x*Math.PI*2) + 4*Math.sin(x*Math.PI*6+2),
+      p3:    x => 61 + 8*Math.sin(x*Math.PI*4+0.3) + 4*Math.sin(x*Math.PI*7+1.5) + 2*Math.cos(x*Math.PI*2.5),
+      outro: x => 71 + 3*Math.sin(x*Math.PI*2) + 1.5*Math.sin(x*Math.PI*5),
+    };
+
+    const CFGS = [
+      { sel:'.panel--hero',  fn:T.hero,  n:420, colors:['#FF2222','#FF3838','#FF1414','#E01818','#CC1010'] },
+      { sel:'.panel--p1',    fn:T.p1,    n:460, colors:['#FF6030','#FF7545','#FF5020','#FF8852','#E05518'] },
+      { sel:'.panel--p2',    fn:T.p2,    n:440, colors:['#FF4466','#FF5578','#FF3350','#FF6688','#E03855'] },
+      { sel:'.panel--p3',    fn:T.p3,    n:500, colors:['#FFAA30','#FFBB50','#FF9920','#FFCC60','#E09018'] },
+      { sel:'.panel--outro', fn:T.outro, n:280, colors:['#FF8888','#FF9898','#FF7878','#FFAAAA','#FF6868'] },
+    ];
+
+    CFGS.forEach(cfg => {
+      const container = document.querySelector(cfg.sel + ' .lights');
+      const count = Math.round(cfg.n * SCALE);
+      const frag = document.createDocumentFragment();
+
+      for (let i = 0; i < count; i++) {
+        const x = Math.random();
+        const ground = cfg.fn(x);
+
+        let y;
+        if (Math.random() < 0.08) {
+          y = ground - Math.random() * 5;
+        } else {
+          y = ground + Math.pow(Math.random(), 1.6) * (97 - ground);
+        }
+
+        const dist = Math.abs(y - ground);
+        const ridge = Math.max(0, 1 - dist / 18);
+        const size = 1 + ridge * 2.5 + Math.random() * 1.5;
+        const opacity = 0.12 + ridge * 0.45 + Math.random() * 0.2;
+        const color = cfg.colors[Math.floor(Math.random() * cfg.colors.length)];
+
+        const el = document.createElement('div');
+        let css = `left:${x*100}%;top:${y}%;width:${size}px;height:${size}px;--c:${color};opacity:${opacity}`;
+
+        if (Math.random() < 0.18) {
+          el.className = 'light light--tw';
+          css += `;--td:${(Math.random()*8).toFixed(1)}s;--tt:${(2.5+Math.random()*4).toFixed(1)}s`;
+        } else {
+          el.className = 'light';
+        }
+
+        el.style.cssText = css;
+        frag.appendChild(el);
+      }
+
+      container.appendChild(frag);
+    });
+
+    // ── Observer ──
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.panel:not(.panel--hero)').forEach(p => observer.observe(p));
+
+    // ── Scroll cue ──
+    const cue = document.querySelector('.scroll-cue');
+    let cueDone = false;
+    window.addEventListener('scroll', () => {
+      if (!cueDone && window.scrollY > 60) { cue.style.opacity = '0'; cueDone = true; }
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
