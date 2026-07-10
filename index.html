@@ -258,8 +258,9 @@
 
     @media (max-width: 640px) {
       .panel--p4 .panel-content {
-        max-width: 100%;
-        padding: 1.5rem;
+        max-width: none;
+        width: 100%;
+        padding: 1.25rem;
       }
       .videos {
         flex-direction: column;
@@ -280,6 +281,9 @@
       }
       .video-wrap--main {
         width: 100%;
+      }
+      .video-wrap {
+        flex-shrink: 1;
       }
     }
 
