@@ -50,6 +50,7 @@
     .panel--p1    { background: #120404; }
     .panel--p2    { background: #1A0808; }
     .panel--p3    { background: #220C0C; }
+    .panel--p4    { background: #2A0E0E; }
     .panel--outro { background: #FFFAFA; color: #1D1D1D; }
 
     .panel-content {
@@ -198,6 +199,68 @@
       outline: 2px solid var(--red);
       outline-offset: 3px;
       border-radius: 2px;
+    }
+
+    /* ── Video embed ── */
+
+    .videos {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+    }
+
+    .panel.in-view .videos {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .video-wrap {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-wrap--main {
+      width: 400px;
+      aspect-ratio: 16 / 9;
+    }
+
+    .video-wrap--short {
+      width: 140px;
+      aspect-ratio: 9 / 16;
+    }
+
+    @media (max-width: 640px) {
+      .videos {
+        flex-direction: column;
+        align-items: center;
+      }
+      .video-wrap--main {
+        width: 100%;
+        max-width: 400px;
+      }
+      .videos .shorts-row {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+      .video-wrap--short {
+        width: 120px;
+      }
     }
 
     /* ── Outro ── */
@@ -394,6 +457,26 @@
     </div>
   </section>
 
+  <!-- ════════ DEMOS ════════ -->
+  <section class="panel panel--p4">
+    <div class="lights"></div>
+    <div class="fedoras"></div>
+    <div class="panel-content">
+      <h2 class="project-title">Demos</h2>
+      <div class="videos">
+        <div class="video-wrap video-wrap--short">
+          <iframe src="https://www.youtube.com/shorts/oWKcwYTmva0" title="Demo short 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-wrap video-wrap--main">
+          <iframe src="https://www.youtube.com/embed/R-481PRHCa0?si=T00gsUQeVjjzbDxz" title="Demo video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-wrap video-wrap--short">
+          <iframe src="https://www.youtube.com/shorts/hT3z79nbN2o" title="Demo short 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ════════ OUTRO ════════ -->
   <section class="panel panel--outro">
     <div class="lights"></div>
@@ -425,6 +508,7 @@
       { sel: '.panel--p1',    n: 3 },
       { sel: '.panel--p2',    n: 8 },
       { sel: '.panel--p3',    n: 16 },
+      { sel: '.panel--p4',    n: 22 },
       { sel: '.panel--outro', n: 28 },
     ];
 
@@ -493,6 +577,7 @@
       p1:    x => 60 + 9*Math.sin(x*Math.PI*3+0.5) + 4*Math.cos(x*Math.PI*5.5+1),
       p2:    x => 63 - 7*Math.cos(x*Math.PI*2) + 4*Math.sin(x*Math.PI*6+2),
       p3:    x => 61 + 8*Math.sin(x*Math.PI*4+0.3) + 4*Math.sin(x*Math.PI*7+1.5) + 2*Math.cos(x*Math.PI*2.5),
+      p4:    x => 62 + 7*Math.sin(x*Math.PI*3.5+1.2) + 3*Math.cos(x*Math.PI*6+0.5) + 2*Math.sin(x*Math.PI*2),
       outro: x => 71 + 3*Math.sin(x*Math.PI*2) + 1.5*Math.sin(x*Math.PI*5),
     };
 
@@ -501,6 +586,7 @@
       { sel:'.panel--p1',    fn:T.p1,    n:460, colors:['#FF6030','#FF7545','#FF5020','#FF8852','#E05518'] },
       { sel:'.panel--p2',    fn:T.p2,    n:440, colors:['#FF4466','#FF5578','#FF3350','#FF6688','#E03855'] },
       { sel:'.panel--p3',    fn:T.p3,    n:500, colors:['#FFAA30','#FFBB50','#FF9920','#FFCC60','#E09018'] },
+      { sel:'.panel--p4',    fn:T.p4,    n:480, colors:['#FF5566','#FF6677','#FF4455','#FF7788','#E04455'] },
       { sel:'.panel--outro', fn:T.outro, n:280, colors:['#FF8888','#FF9898','#FF7878','#FFAAAA','#FF6868'] },
     ];
 
