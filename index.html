@@ -204,14 +204,15 @@
     /* ── Video embed ── */
 
     .panel--p4 .panel-content {
-      max-width: 760px;
+      max-width: 1000px;
     }
 
     .videos {
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
-      gap: 1.25rem;
+      gap: 1rem;
+      height: 200px;
       margin-top: 1.25rem;
       opacity: 0;
       transform: translateY(24px);
@@ -227,7 +228,7 @@
       position: relative;
       border-radius: 8px;
       overflow: hidden;
-      flex-shrink: 0;
+      height: 100%;
     }
 
     .video-wrap iframe {
@@ -239,22 +240,12 @@
     }
 
     .video-wrap--main {
-      width: 420px;
       aspect-ratio: 16 / 9;
     }
 
     .video-wrap--short {
-      width: 132px;
       aspect-ratio: 9 / 16;
     }
-
-    .shorts-row {
-      display: contents;
-    }
-
-    .video-wrap--main { order: 2; }
-    .shorts-row .video-wrap--short:first-child { order: 1; }
-    .shorts-row .video-wrap--short:last-child  { order: 3; }
 
     @media (max-width: 640px) {
       .panel--p4 .panel-content {
@@ -263,27 +254,19 @@
         padding: 1.25rem;
       }
       .videos {
-        flex-direction: column;
-        align-items: stretch;
+        flex-wrap: wrap;
+        height: auto;
         gap: 0.75rem;
       }
-      .shorts-row {
-        display: flex;
-        gap: 0.75rem;
-        order: -1;
-      }
-      .video-wrap--main { order: 0; }
-      .shorts-row .video-wrap--short:first-child,
-      .shorts-row .video-wrap--short:last-child { order: 0; }
-      .video-wrap--short {
-        flex: 1;
-        width: auto;
+      .video-wrap {
+        height: auto;
       }
       .video-wrap--main {
         width: 100%;
       }
-      .video-wrap {
-        flex-shrink: 1;
+      .video-wrap--short {
+        flex: 1;
+        min-width: 0;
       }
     }
 
@@ -489,15 +472,16 @@
       <h2 class="project-title">Demos</h2>
       <div class="videos">
         <div class="video-wrap video-wrap--main">
-          <iframe src="https://www.youtube.com/embed/R-481PRHCa0?si=T00gsUQeVjjzbDxz" title="Demo video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe src="https://www.youtube.com/embed/R-481PRHCa0?si=T00gsUQeVjjzbDxz" title="Demo video 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <div class="shorts-row">
-          <div class="video-wrap video-wrap--short">
-            <iframe src="https://www.youtube.com/embed/oWKcwYTmva0" title="Demo short 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          <div class="video-wrap video-wrap--short">
-            <iframe src="https://www.youtube.com/embed/hT3z79nbN2o" title="Demo short 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
+        <div class="video-wrap video-wrap--main">
+          <iframe src="https://www.youtube.com/embed/xu_7yIbmqKg" title="Demo video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-wrap video-wrap--short">
+          <iframe src="https://www.youtube.com/embed/oWKcwYTmva0" title="Demo short 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-wrap video-wrap--short">
+          <iframe src="https://www.youtube.com/embed/hT3z79nbN2o" title="Demo short 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </div>
     </div>
