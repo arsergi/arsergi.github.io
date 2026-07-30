@@ -369,7 +369,6 @@
       flex-direction: column;
       align-items: center;
       transform-origin: top center;
-      animation: pendulum var(--swing-dur, 4s) ease-in-out var(--swing-delay, 0s) forwards;
     }
 
     .fedora-hat {
@@ -379,6 +378,14 @@
          string–hat junction kinks — reads as the string flexing. */
       --amp: calc(var(--swing, 0deg) * 0.3);
       transform-origin: top center;
+    }
+
+    /* Swing only fires once the panel scrolls into view — same gate as the
+       drop — so each panel's hats animate when you reach them, not at load. */
+    .panel.in-view .fedora-swing {
+      animation: pendulum var(--swing-dur, 4s) ease-in-out var(--swing-delay, 0s) forwards;
+    }
+    .panel.in-view .fedora-hat {
       animation: pendulum var(--swing-dur, 4s) ease-in-out calc(var(--swing-delay, 0s) + 0.12s) forwards;
     }
 
