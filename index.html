@@ -383,10 +383,10 @@
     /* Swing only fires once the panel scrolls into view — same gate as the
        drop — so each panel's hats animate when you reach them, not at load. */
     .panel.in-view .fedora-swing {
-      animation: pendulum var(--swing-dur, 4s) ease-in-out var(--swing-delay, 0s) forwards;
+      animation: pendulum var(--swing-dur, 4s) ease-in-out var(--swing-delay, 0s) both;
     }
     .panel.in-view .fedora-hat {
-      animation: pendulum var(--swing-dur, 4s) ease-in-out calc(var(--swing-delay, 0s) + 0.12s) forwards;
+      animation: pendulum var(--swing-dur, 4s) ease-in-out calc(var(--swing-delay, 0s) + 0.12s) both;
     }
 
     .fedora-hat svg,
@@ -402,17 +402,17 @@
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(6px); }
     }
-    /* Damped harmonic swing: released to first peak, then oscillates
-       down with each swing ~0.6 the last, settling to rest at 0deg.
-       --amp sets the direction/magnitude per element. */
+    /* Damped harmonic swing: released FROM the peak angle (so the hat
+       enters already tilted and arcs in as it drops), then oscillates
+       down with each swing ~0.6 the last, settling to rest at 0deg and
+       holding there. --amp sets direction/magnitude per element. */
     @keyframes pendulum {
-      0%   { transform: rotate(0deg); }
-      12%  { transform: rotate(var(--amp, 0deg)); }
-      32%  { transform: rotate(calc(var(--amp, 0deg) * -0.62)); }
-      50%  { transform: rotate(calc(var(--amp, 0deg) *  0.38)); }
-      66%  { transform: rotate(calc(var(--amp, 0deg) * -0.23)); }
-      80%  { transform: rotate(calc(var(--amp, 0deg) *  0.13)); }
-      90%  { transform: rotate(calc(var(--amp, 0deg) * -0.06)); }
+      0%   { transform: rotate(var(--amp, 0deg)); }
+      18%  { transform: rotate(calc(var(--amp, 0deg) * -0.60)); }
+      36%  { transform: rotate(calc(var(--amp, 0deg) *  0.36)); }
+      54%  { transform: rotate(calc(var(--amp, 0deg) * -0.22)); }
+      72%  { transform: rotate(calc(var(--amp, 0deg) *  0.13)); }
+      86%  { transform: rotate(calc(var(--amp, 0deg) * -0.06)); }
       100% { transform: rotate(0deg); }
     }
 
@@ -595,7 +595,7 @@
         const Leff = 160 + stringLen + r;            // px, pivot (top anchor) → hat centre
         const swingPeriod = 0.09 * Math.sqrt(Leff);  // T = 2π√(L/g), scaled: longer = slower
         const swingDur = swingPeriod * 3;            // a few swings, then settle
-        const swingDelay = delay + 0.9;              // start once the drop lands
+        const swingDelay = delay;                    // swing WITH the drop → arced entry
 
         const wrap = document.createElement('div');
         wrap.className = 'fedora-wrap';
