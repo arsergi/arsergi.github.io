@@ -331,8 +331,12 @@
     /* ── Fedoras ── */
 
     .fedora-wrap {
+      /* --lift: string overshoot hidden above the viewport. The panel's
+         overflow:hidden clips it at the screen top, so it never spills
+         into the panel above while making the strings read as longer. */
+      --lift: 160px;
       position: absolute;
-      top: 0;
+      top: calc(-1 * var(--lift));
       left: var(--x);
       z-index: 3;
       display: flex;
@@ -352,18 +356,30 @@
 
     .fedora-string {
       width: 2px;
-      height: var(--string);
+      height: calc(var(--string) + var(--lift));
       background: rgba(255, 255, 255, 0.25);
     }
 
     .panel--outro .fedora-string { background: rgba(0, 0, 0, 0.15); }
 
+    /* Rigid pendulum: string + hat rotate together about the top anchor. */
+    .fedora-swing {
+      --amp: var(--swing, 0deg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform-origin: top center;
+      animation: pendulum var(--swing-dur, 4s) ease-in-out var(--swing-delay, 0s) forwards;
+    }
+
     .fedora-hat {
       width: var(--size);
       margin-top: -8px;
+      /* Secondary, smaller swing, phase-lagged behind the string so the
+         string–hat junction kinks — reads as the string flexing. */
+      --amp: calc(var(--swing, 0deg) * 0.3);
       transform-origin: top center;
-      animation: swing var(--period, 4s) ease-in-out infinite;
-      animation-delay: var(--delay, 0s);
+      animation: pendulum var(--swing-dur, 4s) ease-in-out calc(var(--swing-delay, 0s) + 0.12s) forwards;
     }
 
     .fedora-hat svg,
@@ -379,9 +395,18 @@
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(6px); }
     }
-    @keyframes swing {
-      0%, 100% { transform: rotate(-2.5deg); }
-      50%      { transform: rotate(2.5deg); }
+    /* Damped harmonic swing: released to first peak, then oscillates
+       down with each swing ~0.6 the last, settling to rest at 0deg.
+       --amp sets the direction/magnitude per element. */
+    @keyframes pendulum {
+      0%   { transform: rotate(0deg); }
+      12%  { transform: rotate(var(--amp, 0deg)); }
+      32%  { transform: rotate(calc(var(--amp, 0deg) * -0.62)); }
+      50%  { transform: rotate(calc(var(--amp, 0deg) *  0.38)); }
+      66%  { transform: rotate(calc(var(--amp, 0deg) * -0.23)); }
+      80%  { transform: rotate(calc(var(--amp, 0deg) *  0.13)); }
+      90%  { transform: rotate(calc(var(--amp, 0deg) * -0.06)); }
+      100% { transform: rotate(0deg); }
     }
 
     /* ── Responsive ── */
@@ -557,13 +582,21 @@
         placed.push({ cx, cy, r });
         const opacity = 0.85 + Math.random() * 0.15;
         const delay = 0.1 + (hatIndex / count) * 0.8 + Math.random() * 0.2;
-        const period = 3 + Math.random() * 3;
+
+        // ── Pendulum physics ──
+        const swing = (4 + Math.random() * 9) * (Math.random() < 0.5 ? -1 : 1); // deg
+        const Leff = 160 + stringLen + r;            // px, pivot (top anchor) → hat centre
+        const swingPeriod = 0.09 * Math.sqrt(Leff);  // T = 2π√(L/g), scaled: longer = slower
+        const swingDur = swingPeriod * 3;            // a few swings, then settle
+        const swingDelay = delay + 0.9;              // start once the drop lands
 
         const wrap = document.createElement('div');
         wrap.className = 'fedora-wrap';
         wrap.style.cssText =
           `--x:${x}%;--string:${stringLen}px;--size:${size}px;` +
-          `--delay:${delay.toFixed(2)}s;--opacity:${opacity.toFixed(2)};--period:${period.toFixed(1)}s`;
+          `--delay:${delay.toFixed(2)}s;--opacity:${opacity.toFixed(2)};` +
+          `--swing:${swing.toFixed(1)}deg;--swing-dur:${swingDur.toFixed(2)}s;` +
+          `--swing-delay:${swingDelay.toFixed(2)}s`;
 
         const string = document.createElement('div');
         string.className = 'fedora-string';
@@ -572,8 +605,12 @@
         hat.className = 'fedora-hat';
         hat.appendChild(fedoraSvg.cloneNode(true));
 
-        wrap.appendChild(string);
-        wrap.appendChild(hat);
+        const swingBox = document.createElement('div');
+        swingBox.className = 'fedora-swing';
+        swingBox.appendChild(string);
+        swingBox.appendChild(hat);
+
+        wrap.appendChild(swingBox);
         frag.appendChild(wrap);
         hatIndex++;
       }
