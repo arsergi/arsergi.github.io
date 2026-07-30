@@ -356,7 +356,7 @@
 
     .fedora-string {
       width: 2px;
-      height: calc(var(--string) + var(--lift) + 10px);
+      height: calc(var(--string) + var(--lift));
       background: rgba(255, 255, 255, 0.25);
     }
 
@@ -373,7 +373,10 @@
 
     .fedora-hat {
       width: var(--size);
-      margin-top: -8px;
+      /* PNG has ~17.6% transparent padding above the crown; pull the hat up
+         by a proportion of its size so the string ends behind the crown,
+         not in the empty space above it. */
+      margin-top: calc(var(--size) * -0.08);
       /* Secondary, smaller swing, phase-lagged behind the string so the
          string–hat junction kinks — reads as the string flexing. */
       --amp: calc(var(--swing, 0deg) * 0.3);
